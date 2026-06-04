@@ -28,6 +28,12 @@ const metrics = [
   { value: '1000w+', label: '日均渲染素材' },
 ]
 
+const valuePillars = [
+  '复杂创意流程结构化',
+  '视频渲染链路工程化',
+  '素材与数据资产闭环',
+]
+
 const capabilityCards = [
   {
     icon: 'cube',
@@ -52,18 +58,21 @@ const systems = [
     subtitle: '结构化管理万级素材资源',
     flow: ['资产接入', '资产建模', '标签体系', '审核管理', '调用分发'],
     footer: ['权限与分类建模', '统一检索体系', '权限与版本管理'],
+    result: '支撑跨团队素材复用与资产治理',
   },
   {
     title: '一键成片平台',
     subtitle: '从创意到成片的自动化流水线',
     flow: ['创意结构', '素材匹配', '镜头生成', '渲染合成', '成片输出'],
     footer: ['结构公式驱动', '自动化生成', '批量渲染'],
+    result: '将重复剪辑流程沉淀为可编排系统',
   },
   {
     title: '成片库系统',
     subtitle: '成片资产的生命周期管理',
     flow: ['成片入库', '版本管理', '投放管理', '数据回流', '效果分析'],
     footer: ['多版本管理', '投放效果关联', '效果回归分析'],
+    result: '形成从投放到效果分析的数据回流',
   },
 ]
 
@@ -89,25 +98,25 @@ const notes = [
   {
     type: '系统设计',
     title: '为什么创意生产需要结构化？',
-    date: '2024-05-20',
+    date: '2026-05-20',
     text: '从工具化到系统化，拆解创意生产中真正影响效率的关键链路。',
   },
   {
     type: '视频工程',
     title: 'FFmpeg 滤镜图设计最佳实践',
-    date: '2024-05-15',
+    date: '2026-05-15',
     text: '深入解析滤镜链路的设计、调试与复杂视频混流方案。',
   },
   {
     type: '架构实践',
     title: '素材库的数据模型设计',
-    date: '2024-05-10',
+    date: '2026-05-10',
     text: '如何设计支持复用、检索和版本管理的创意素材模型。',
   },
   {
     type: '工程实践',
     title: '从 PRD 到系统落地的思考',
-    date: '2024-05-05',
+    date: '2026-05-05',
     text: '产品、架构和工程协同，推动复杂系统从想法到交付。',
   },
 ]
@@ -138,6 +147,12 @@ const pipelineNodes = [
 ]
 
 const services = ['用户服务', '资产服务', '自动服务', '流程服务', '任务服务', '规则库']
+
+const workModes = [
+  { title: 'MVP 优先', text: '先把关键链路跑通，再用真实反馈收敛复杂度。' },
+  { title: '结构公式驱动', text: '把创意经验抽象为规则、模板和可复用的工程模型。' },
+  { title: '跨团队对齐', text: '用可视化流程和数据口径连接产品、创意与工程团队。' },
+]
 </script>
 
 <template>
@@ -165,6 +180,9 @@ const services = ['用户服务', '资产服务', '自动服务', '流程服务'
           <p class="hero-text">
             专注企业级素材库与视频自动化生产系统建设，用工程能力解决创意生产的规模化与效率问题。
           </p>
+          <div class="value-pills" aria-label="核心价值">
+            <span v-for="pillar in valuePillars" :key="pillar">{{ pillar }}</span>
+          </div>
           <div class="metrics" aria-label="核心指标">
             <div v-for="metric in metrics" :key="metric.label">
               <strong>{{ metric.value }}</strong>
@@ -208,6 +226,20 @@ const services = ['用户服务', '资产服务', '自动服务', '流程服务'
               <strong>分发投放</strong>
             </article>
           </div>
+          <aside class="ops-panel" aria-label="生产链路运行指标">
+            <div>
+              <span>Pipeline Health</span>
+              <strong>99.9%</strong>
+            </div>
+            <div>
+              <span>Render Queue</span>
+              <strong>12,840</strong>
+            </div>
+            <div>
+              <span>Asset Reuse</span>
+              <strong>68%</strong>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -245,6 +277,7 @@ const services = ['用户服务', '资产服务', '自动服务', '流程服务'
             <div class="system-footer">
               <span v-for="item in system.footer" :key="item">{{ item }}</span>
             </div>
+            <p class="system-result">{{ system.result }}</p>
           </article>
         </div>
       </section>
@@ -308,6 +341,12 @@ const services = ['用户服务', '资产服务', '自动服务', '流程服务'
 
       <section id="about" class="content-section about-section">
         <SectionTitle label="关于我" />
+        <div class="work-mode-grid">
+          <article v-for="mode in workModes" :key="mode.title" class="work-mode-card">
+            <h3>{{ mode.title }}</h3>
+            <p>{{ mode.text }}</p>
+          </article>
+        </div>
         <div class="about-grid">
           <article class="about-card">
             <h3>个人简介</h3>
@@ -367,7 +406,7 @@ const services = ['用户服务', '资产服务', '自动服务', '流程服务'
     </main>
 
     <footer class="footer">
-      <span>© 2024 Changjun. All rights reserved.</span>
+      <span>© 2026 Changjun. All rights reserved.</span>
       <strong>“结构公式指导开发，工程能力创造价值”</strong>
       <div>
         <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
