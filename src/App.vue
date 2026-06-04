@@ -165,7 +165,7 @@ const workModes = [
       <nav aria-label="主导航">
         <a v-for="item in navItems" :key="item.href" :href="item.href">{{ item.label }}</a>
       </nav>
-      <a class="outline-button" href="mailto:changjun@example.com">
+      <a class="outline-button" href="caichangjun001@gmail.com">
         <span class="icon-mail" aria-hidden="true"></span>
         联系方式
       </a>
@@ -392,13 +392,9 @@ const workModes = [
           <article id="contact" class="about-card contact-card">
             <h3>联系我</h3>
             <div class="contact-list">
-              <a href="mailto:changjun@example.com"><span>✉</span> changjun@example.com</a>
-              <a href="https://github.com" target="_blank" rel="noreferrer"><span>⌘</span> GitHub</a>
+              <a href="mailto:caichangjun001@gmail.com"><span>✉</span> caichangjun001@gmail.com</a>
+              <a href="https://github.com/ccj-cxy" target="_blank" rel="noreferrer"><span>⌘</span> GitHub</a>
               <a href="https://linkedin.com" target="_blank" rel="noreferrer"><span>in</span> LinkedIn</a>
-              <span><span>☎</span> 138 0013 8000</span>
-            </div>
-            <div class="qr-code" aria-label="微信二维码占位">
-              <i v-for="n in 49" :key="n" :class="{ on: n % 2 === 0 || n % 7 === 0 || n % 13 === 0 }"></i>
             </div>
           </article>
         </div>
@@ -409,8 +405,8 @@ const workModes = [
       <span>© 2026 Changjun. All rights reserved.</span>
       <strong>“结构公式指导开发，工程能力创造价值”</strong>
       <div>
-        <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
-        <a href="mailto:changjun@example.com">Email</a>
+        <a href="https://github.com/ccj-cxy/" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="mailto:caichangjun001@gmail.com">Email</a>
         <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
       </div>
     </footer>
