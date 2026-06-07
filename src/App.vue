@@ -334,7 +334,6 @@ const workModes = [
               fill="black"
             >
               <tspan x="0" :y="introMotion.fontSize * 0.86">Creative</tspan>
-              <tspan x="0" :y="introMotion.fontSize * 0.86 + introMotion.lineHeight">Technology Lead</tspan>
             </text>
           </mask>
         </defs>
@@ -362,7 +361,7 @@ const workModes = [
         </div>
         <div class="hero-copy">
           <p class="eyebrow">Changjun Labs</p>
-          <h1 ref="heroTitle">Creative<br />Technology Lead</h1>
+          <h1 ref="heroTitle">Creative</h1>
           <h2>将广告创意生产<span>工业化</span></h2>
           <p class="hero-text">
             专注企业级素材库与视频自动化生产系统建设，用工程能力解决创意生产的规模化与效率问题。
