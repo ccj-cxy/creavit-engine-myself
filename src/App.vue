@@ -12,6 +12,12 @@ const introMotion = ref({
   startY: 0,
   targetX: 0,
   targetY: 0,
+  viewportWidth: 1,
+  viewportHeight: 1,
+  titleWidth: 1,
+  titleHeight: 1,
+  fontSize: 92,
+  lineHeight: 99,
   startScale: 2.6,
   endScale: 1,
 })
@@ -27,6 +33,14 @@ const handleScroll = () => {
 
 const syncIntroMotion = () => {
   const targetRect = heroTitle.value?.getBoundingClientRect()
+  const titleStyle = heroTitle.value
+    ? window.getComputedStyle(heroTitle.value)
+    : null
+  const titleWidth = targetRect?.width || 1
+  const titleHeight = targetRect?.height || 1
+  const fontSize = titleStyle ? parseFloat(titleStyle.fontSize) : 92
+  const parsedLineHeight = titleStyle ? parseFloat(titleStyle.lineHeight) : NaN
+  const lineHeight = Number.isFinite(parsedLineHeight) ? parsedLineHeight : fontSize * 1.08
   const startX = window.innerWidth / 2
   const startY = window.innerHeight / 2
   const startScale = window.innerWidth <= 720
@@ -36,25 +50,29 @@ const syncIntroMotion = () => {
       : 2.65
 
   introMotion.value = {
-    startX,
-    startY,
-    targetX: targetRect ? targetRect.left + targetRect.width / 2 : startX,
-    targetY: targetRect ? targetRect.top + targetRect.height / 2 : startY,
+    startX: startX - (titleWidth * startScale) / 2,
+    startY: startY - (titleHeight * startScale) / 2,
+    targetX: targetRect ? targetRect.left : startX - titleWidth / 2,
+    targetY: targetRect ? targetRect.top : startY - titleHeight / 2,
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    titleWidth,
+    titleHeight,
+    fontSize,
+    lineHeight,
     startScale,
     endScale: 1,
   }
 }
 
-const getIntroTitleStyle = () => {
+const getIntroTitleTransform = () => {
   const progress = introProgress.value
   const motion = introMotion.value
   const x = motion.startX + (motion.targetX - motion.startX) * progress
   const y = motion.startY + (motion.targetY - motion.startY) * progress
   const scale = motion.startScale + (motion.endScale - motion.startScale) * progress
 
-  return {
-    transform: `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale})`,
-  }
+  return `translate(${x} ${y}) scale(${scale})`
 }
 
 onMounted(() => {
@@ -288,15 +306,47 @@ const workModes = [
       aria-hidden="true"
     >
       <!-- 黑色蒙版 -->
-      <div class="intro-mask"></div>
-      <!-- 开场文字 -->
-      <div
-        class="intro-title"
-        :style="getIntroTitleStyle()"
+      <svg
+        class="intro-mask-svg"
+        :viewBox="`0 0 ${introMotion.viewportWidth} ${introMotion.viewportHeight}`"
+        preserveAspectRatio="none"
       >
-        <span class="intro-line">Creative</span>
-        <span class="intro-line">Technology Lead</span>
-      </div>
+        <defs>
+          <mask
+            id="intro-title-cutout"
+            maskUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            :width="introMotion.viewportWidth"
+            :height="introMotion.viewportHeight"
+          >
+            <rect
+              x="0"
+              y="0"
+              :width="introMotion.viewportWidth"
+              :height="introMotion.viewportHeight"
+              fill="white"
+            />
+            <text
+              class="intro-cutout-text"
+              :transform="getIntroTitleTransform()"
+              :style="{ fontSize: introMotion.fontSize + 'px' }"
+              fill="black"
+            >
+              <tspan x="0" :y="introMotion.fontSize * 0.86">Creative</tspan>
+              <tspan x="0" :y="introMotion.fontSize * 0.86 + introMotion.lineHeight">Technology Lead</tspan>
+            </text>
+          </mask>
+        </defs>
+        <rect
+          x="0"
+          y="0"
+          :width="introMotion.viewportWidth"
+          :height="introMotion.viewportHeight"
+          fill="#000000"
+          mask="url(#intro-title-cutout)"
+        />
+      </svg>
     </div>
 
     <main>
