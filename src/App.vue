@@ -1,5 +1,96 @@
 <script setup>
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, onMounted, onUnmounted, ref } from 'vue'
+
+const mouseX = ref(0)
+const mouseY = ref(0)
+const scrollY = ref(0)
+const introProgress = ref(0)
+const introComplete = ref(false)
+const heroTitle = ref(null)
+const introMotion = ref({
+  startX: 0,
+  startY: 0,
+  targetX: 0,
+  targetY: 0,
+  startScale: 2.6,
+  endScale: 1,
+})
+
+const handleMouseMove = (e) => {
+  mouseX.value = e.clientX
+  mouseY.value = e.clientY
+}
+
+const handleScroll = () => {
+  scrollY.value = window.scrollY
+}
+
+const syncIntroMotion = () => {
+  const targetRect = heroTitle.value?.getBoundingClientRect()
+  const startX = window.innerWidth / 2
+  const startY = window.innerHeight / 2
+  const startScale = window.innerWidth <= 720
+    ? 1.8
+    : window.innerWidth <= 1120
+      ? 2.2
+      : 2.65
+
+  introMotion.value = {
+    startX,
+    startY,
+    targetX: targetRect ? targetRect.left + targetRect.width / 2 : startX,
+    targetY: targetRect ? targetRect.top + targetRect.height / 2 : startY,
+    startScale,
+    endScale: 1,
+  }
+}
+
+const getIntroTitleStyle = () => {
+  const progress = introProgress.value
+  const motion = introMotion.value
+  const x = motion.startX + (motion.targetX - motion.startX) * progress
+  const y = motion.startY + (motion.targetY - motion.startY) * progress
+  const scale = motion.startScale + (motion.endScale - motion.startScale) * progress
+
+  return {
+    transform: `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale})`,
+  }
+}
+
+onMounted(() => {
+  syncIntroMotion()
+  window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('resize', syncIntroMotion)
+
+  // 开场动画：从屏幕中心的大标题收束到 Hero 标题的实际位置。
+  const duration = 2200
+  const startTime = performance.now()
+
+  const animate = (now) => {
+    const elapsed = now - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    // easeInOutCubic
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2
+    introProgress.value = eased
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      introComplete.value = true
+    }
+  }
+
+  requestAnimationFrame(animate)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', syncIntroMotion)
+})
 
 const SectionTitle = defineComponent({
   props: {
@@ -157,6 +248,25 @@ const workModes = [
 
 <template>
   <div class="site-shell">
+    <!-- 全局动态背景层 -->
+    <div class="global-bg" aria-hidden="true">
+      <div class="particle-field"></div>
+      <div class="glow-orb orb-1"></div>
+      <div class="glow-orb orb-2"></div>
+      <div class="glow-orb orb-3"></div>
+      <div class="scan-line"></div>
+    </div>
+
+    <!-- 鼠标跟随光晕 -->
+    <div
+      class="cursor-glow"
+      aria-hidden="true"
+      :style="{
+        left: mouseX + 'px',
+        top: mouseY + 'px',
+      }"
+    ></div>
+
     <header class="topbar">
       <a class="brand" href="#home" aria-label="Changjun Labs">
         <span>CJ</span>
@@ -171,11 +281,38 @@ const workModes = [
       </a>
     </header>
 
+    <!-- 全屏开场标题 -->
+    <div
+      class="intro-overlay"
+      :class="{ complete: introComplete }"
+      aria-hidden="true"
+    >
+      <!-- 黑色蒙版 -->
+      <div class="intro-mask"></div>
+      <!-- 开场文字 -->
+      <div
+        class="intro-title"
+        :style="getIntroTitleStyle()"
+      >
+        <span class="intro-line">Creative</span>
+        <span class="intro-line">Technology Lead</span>
+      </div>
+    </div>
+
     <main>
-      <section id="home" class="hero section-band">
+      <section
+        id="home"
+        class="hero section-band"
+        :style="{ '--parallax-y': scrollY * 0.15 + 'px' }"
+      >
+        <div class="hero-bg-layer" aria-hidden="true">
+          <div class="hero-grid-bg"></div>
+          <div class="hero-gradient-overlay"></div>
+          <div class="hero-noise"></div>
+        </div>
         <div class="hero-copy">
           <p class="eyebrow">Changjun Labs</p>
-          <h1>Creative<br />Technology Lead</h1>
+          <h1 ref="heroTitle">Creative<br />Technology Lead</h1>
           <h2>将广告创意生产<span>工业化</span></h2>
           <p class="hero-text">
             专注企业级素材库与视频自动化生产系统建设，用工程能力解决创意生产的规模化与效率问题。
@@ -243,7 +380,15 @@ const workModes = [
         </div>
       </section>
 
-      <section id="systems" class="content-section">
+      <section
+        id="systems"
+        class="content-section section-with-bg"
+        :style="{ '--parallax-y': (scrollY - 400) * 0.08 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <SectionTitle label="我构建的系统" />
         <div class="capability-grid">
           <article v-for="(card, index) in capabilityCards" :key="card.title" class="capability-card">
@@ -259,7 +404,14 @@ const workModes = [
         </div>
       </section>
 
-      <section class="content-section">
+      <section
+        class="content-section section-with-bg alt"
+        :style="{ '--parallax-y': (scrollY - 900) * 0.06 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <SectionTitle label="核心系统与解决方案" />
         <div class="systems-grid">
           <article v-for="system in systems" :key="system.title" class="system-card">
@@ -282,7 +434,15 @@ const workModes = [
         </div>
       </section>
 
-      <section id="engineering" class="content-section">
+      <section
+        id="engineering"
+        class="content-section section-with-bg"
+        :style="{ '--parallax-y': (scrollY - 1400) * 0.08 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <SectionTitle label="工程难题攻坚" />
         <div class="challenge-grid">
           <article v-for="challenge in challenges" :key="challenge.title" class="challenge-card">
@@ -296,7 +456,15 @@ const workModes = [
         </div>
       </section>
 
-      <section id="architecture" class="content-section architecture-section">
+      <section
+        id="architecture"
+        class="content-section architecture-section section-with-bg alt"
+        :style="{ '--parallax-y': (scrollY - 1900) * 0.06 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <SectionTitle label="系统架构" />
         <div class="pipeline">
           <template v-for="(node, index) in pipelineNodes" :key="node.title">
@@ -319,7 +487,15 @@ const workModes = [
         </div>
       </section>
 
-      <section id="notes" class="content-section">
+      <section
+        id="notes"
+        class="content-section section-with-bg"
+        :style="{ '--parallax-y': (scrollY - 2400) * 0.08 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <div class="section-heading-row">
           <SectionTitle label="思考与实践" />
           <a href="#contact">查看更多 →</a>
@@ -339,7 +515,15 @@ const workModes = [
         </div>
       </section>
 
-      <section id="about" class="content-section about-section">
+      <section
+        id="about"
+        class="content-section about-section section-with-bg alt"
+        :style="{ '--parallax-y': (scrollY - 2900) * 0.06 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
         <SectionTitle label="关于我" />
         <div class="work-mode-grid">
           <article v-for="mode in workModes" :key="mode.title" class="work-mode-card">
