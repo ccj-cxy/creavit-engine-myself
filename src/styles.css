@@ -555,9 +555,9 @@ a {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   min-height: 72px;
   padding: 0 68px;
   background: rgba(5, 8, 22, 0.78);
@@ -615,7 +615,8 @@ a {
 
 .outline-button,
 .secondary-button,
-.primary-button {
+.primary-button,
+.language-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -631,6 +632,14 @@ a {
     border-color 180ms ease,
     background 180ms ease,
     box-shadow 180ms ease;
+}
+
+.language-toggle {
+  min-width: 82px;
+  color: #dbeafe;
+  background: rgba(15, 23, 42, 0.64);
+  border: 1px solid rgba(96, 165, 250, 0.24);
+  cursor: pointer;
 }
 
 .outline-button,
@@ -649,7 +658,8 @@ a {
 
 .primary-button:hover,
 .secondary-button:hover,
-.outline-button:hover {
+.outline-button:hover,
+.language-toggle:hover {
   transform: translateY(-2px);
   border-color: rgba(96, 165, 250, 0.6);
 }
@@ -2076,7 +2086,7 @@ li::marker {
 
 @media (max-width: 1120px) {
   .topbar {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     padding: 0 28px;
   }
 
@@ -2151,6 +2161,11 @@ li::marker {
   .topbar {
     min-height: 64px;
     padding: 0 18px;
+  }
+
+  .language-toggle {
+    min-width: 64px;
+    padding: 0 0.8rem;
   }
 
   .brand small,
