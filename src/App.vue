@@ -166,6 +166,8 @@ const iconNodes = {
   workflow: [['rect', { x: '3', y: '3', width: '6', height: '6', rx: '1' }], ['rect', { x: '15', y: '15', width: '6', height: '6', rx: '1' }], ['path', { d: 'M9 6h5a4 4 0 0 1 4 4v5' }], ['path', { d: 'm15 12 3 3 3-3' }]],
   terminal: [['path', { d: 'm4 17 6-5-6-5' }], ['path', { d: 'M12 19h8' }]],
   cloud: [['path', { d: 'M17.5 19H8a6 6 0 1 1 1.1-11.9A7 7 0 0 1 22 12a4.5 4.5 0 0 1-4.5 7Z' }]],
+  palette: [['circle', { cx: '13.5', cy: '6.5', r: '.5' }], ['circle', { cx: '17.5', cy: '10.5', r: '.5' }], ['circle', { cx: '8.5', cy: '7.5', r: '.5' }], ['circle', { cx: '6.5', cy: '12.5', r: '.5' }], ['path', { d: 'M12 22a10 10 0 1 1 10-10 3.5 3.5 0 0 1-3.5 3.5h-1.2a2.1 2.1 0 0 0-1.8 3.1 2.1 2.1 0 0 1-1.8 3.4H12Z' }]],
+  sliders: [['path', { d: 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3' }], ['path', { d: 'M2 14h4M10 8h4M18 16h4' }]],
 }
 
 const Icon = defineComponent({
@@ -337,6 +339,13 @@ const pipelineNodes = [
 
 const services = ['用户服务', '资产服务', '自动服务', '流程服务', '任务服务', '规则库']
 
+const creativeSignals = [
+  { icon: 'lightbulb', label: 'Idea Seed', value: '18 briefs' },
+  { icon: 'palette', label: 'Visual Tone', value: '6 palettes' },
+  { icon: 'film', label: 'Shot Formula', value: '42 clips' },
+  { icon: 'activity', label: 'Feedback Loop', value: '+31%' },
+]
+
 const workModes = [
   { icon: 'target', title: 'MVP 优先', text: '先把关键链路跑通，再用真实反馈收敛复杂度。' },
   { icon: 'workflow', title: '结构公式驱动', text: '把创意经验抽象为规则、模板和可复用的工程模型。' },
@@ -465,7 +474,7 @@ const flowIcons = {
               :style="{ fontSize: introMotion.fontSize + 'px' }"
               fill="black"
             >
-              <tspan x="0" :y="introMotion.fontSize * 0.86">Creative</tspan>
+              <tspan x="0" :y="introMotion.fontSize * 0.86">Creative Engine</tspan>
             </text>
           </mask>
         </defs>
@@ -492,11 +501,11 @@ const flowIcons = {
           <div class="hero-noise"></div>
         </div>
         <div class="hero-copy">
-          <p class="eyebrow">Changjun Labs</p>
-          <h1 ref="heroTitle">Creative</h1>
-          <h2>将广告创意生产<span>工业化</span></h2>
+          <p class="eyebrow">Creative Engine OS</p>
+          <h1 ref="heroTitle">Creative Engine</h1>
+          <h2>把广告创意生产做成<span>可编排的工程系统</span></h2>
           <p class="hero-text">
-            专注企业级素材库与视频自动化生产系统建设，用工程能力解决创意生产的规模化与效率问题。
+            专注企业级素材库、成片库与视频自动化生产系统建设，把灵感、素材、镜头公式、渲染与数据回流串成稳定的创意生产引擎。
           </p>
           <div class="value-pills" aria-label="核心价值">
             <span v-for="pillar in valuePillars" :key="pillar.label">
@@ -518,6 +527,36 @@ const flowIcons = {
         </div>
 
         <div class="hero-visual" aria-label="创意生产自动化流程">
+          <div class="creative-console" aria-hidden="true">
+            <div class="console-top">
+              <span></span><span></span><span></span>
+              <strong>creative-engine.pipeline</strong>
+            </div>
+            <div class="storyboard-strip">
+              <div class="story-frame frame-a"><span>01</span></div>
+              <div class="story-frame frame-b"><span>02</span></div>
+              <div class="story-frame frame-c"><span>03</span></div>
+            </div>
+            <div class="creative-timeline">
+              <span style="--w: 28%; --c: var(--magenta)"></span>
+              <span style="--w: 18%; --c: var(--amber)"></span>
+              <span style="--w: 34%; --c: var(--cyan)"></span>
+              <span style="--w: 14%; --c: var(--green)"></span>
+            </div>
+            <div class="waveform">
+              <i v-for="index in 22" :key="index" :style="{ '--h': 18 + ((index * 17) % 42) + 'px' }"></i>
+            </div>
+            <div class="palette-board">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="creative-signal-grid">
+            <div v-for="signal in creativeSignals" :key="signal.label">
+              <Icon :name="signal.icon" />
+              <span>{{ signal.label }}</span>
+              <strong>{{ signal.value }}</strong>
+            </div>
+          </div>
           <div class="orbit orbit-one"></div>
           <div class="orbit orbit-two"></div>
           <div class="grid-plane"></div>
