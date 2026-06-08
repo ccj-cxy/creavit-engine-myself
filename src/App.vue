@@ -198,6 +198,7 @@ const navItems = [
   { icon: 'home', label: '首页', href: '#home' },
   { icon: 'layers', label: '系统案例', href: '#systems' },
   { icon: 'cpu', label: '工程能力', href: '#engineering' },
+  { icon: 'target', label: '后续规划', href: '#roadmap' },
   { icon: 'notebook', label: '思考笔记', href: '#notes' },
   { icon: 'user', label: '关于我', href: '#about' },
   { icon: 'mail', label: '联系我', href: '#contact' },
@@ -340,6 +341,37 @@ const workModes = [
   { icon: 'target', title: 'MVP 优先', text: '先把关键链路跑通，再用真实反馈收敛复杂度。' },
   { icon: 'workflow', title: '结构公式驱动', text: '把创意经验抽象为规则、模板和可复用的工程模型。' },
   { icon: 'users', title: '跨团队对齐', text: '用可视化流程和数据口径连接产品、创意与工程团队。' },
+]
+
+const roadmapItems = [
+  {
+    icon: 'workflow',
+    phase: '近期',
+    title: '沉淀创意生产方法论',
+    text: '把素材库、成片库、一键成片平台中的共性流程继续抽象成可复用的结构公式和工程模板。',
+    actions: ['完善镜头公式体系', '梳理素材标签标准', '形成案例复盘文档'],
+  },
+  {
+    icon: 'sparkles',
+    phase: '中期',
+    title: '探索 AI 辅助创意工程',
+    text: '围绕脚本生成、素材匹配、镜头推荐和效果归因，尝试把 AI 能力接入现有生产链路。',
+    actions: ['创意脚本结构化', '素材智能检索', '渲染策略推荐'],
+  },
+  {
+    icon: 'database',
+    phase: '中长期',
+    title: '建设数据资产闭环',
+    text: '让投放效果、素材表现、模板质量和生产成本形成统一指标，为后续自动优化提供依据。',
+    actions: ['效果数据回流', '资产价值评估', '生产效率看板'],
+  },
+  {
+    icon: 'users',
+    phase: '长期',
+    title: '扩展技术影响力',
+    text: '持续输出创意工程、视频自动化和系统架构实践，逐步形成可被团队复用的知识体系。',
+    actions: ['技术文章沉淀', '内部工具产品化', '跨团队工程协作'],
+  },
 ]
 
 const flowIcons = {
@@ -648,9 +680,38 @@ const flowIcons = {
       </section>
 
       <section
+        id="roadmap"
+        class="content-section roadmap-section section-with-bg"
+        :style="{ '--parallax-y': (scrollY - 2200) * 0.07 + 'px' }"
+      >
+        <div class="section-bg" aria-hidden="true">
+          <div class="section-bg-pattern"></div>
+          <div class="section-bg-gradient"></div>
+        </div>
+        <div class="section-heading-row">
+          <SectionTitle label="后续规划" icon="target" />
+          <p class="section-kicker">从项目交付走向方法沉淀，再到智能化生产闭环。</p>
+        </div>
+        <div class="roadmap-grid">
+          <article v-for="(item, index) in roadmapItems" :key="item.title" class="roadmap-card">
+            <div class="roadmap-marker">
+              <Icon :name="item.icon" />
+              <span>{{ String(index + 1).padStart(2, '0') }}</span>
+            </div>
+            <small>{{ item.phase }}</small>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+            <div class="roadmap-actions">
+              <span v-for="action in item.actions" :key="action"><Icon name="check" />{{ action }}</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section
         id="notes"
         class="content-section section-with-bg"
-        :style="{ '--parallax-y': (scrollY - 2400) * 0.08 + 'px' }"
+        :style="{ '--parallax-y': (scrollY - 2800) * 0.08 + 'px' }"
       >
         <div class="section-bg" aria-hidden="true">
           <div class="section-bg-pattern"></div>
@@ -679,7 +740,7 @@ const flowIcons = {
       <section
         id="about"
         class="content-section about-section section-with-bg alt"
-        :style="{ '--parallax-y': (scrollY - 2900) * 0.06 + 'px' }"
+        :style="{ '--parallax-y': (scrollY - 3300) * 0.06 + 'px' }"
       >
         <div class="section-bg" aria-hidden="true">
           <div class="section-bg-pattern"></div>
